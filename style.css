@@ -839,6 +839,148 @@ html, body {
   z-index: 10;
 }
 
+/* Controls Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+[data-color-scheme="dark"] .modal-backdrop {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  background-color: var(--mono-bg);
+  border: 3px solid var(--mono-border);
+  overflow-y: auto;
+  z-index: 51;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--mono-border);
+}
+
+.modal-title {
+  font-family: var(--font-family-game);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+  color: var(--mono-text);
+  letter-spacing: 0.05em;
+}
+
+.modal-close-btn {
+  font-family: var(--font-family-game);
+  font-size: 1.5rem;
+  font-weight: 400;
+  background: none;
+  border: 2px solid var(--mono-border);
+  color: var(--mono-text);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal) ease;
+  background-color: var(--mono-bg);
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:active {
+  background-color: var(--mono-text);
+  color: var(--mono-bg);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.controls-section {
+  display: block;
+}
+
+.control-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--mono-border);
+  font-family: var(--font-family-game);
+}
+
+.control-item:last-child {
+  border-bottom: none;
+}
+
+.control-action {
+  font-weight: 400;
+  color: var(--mono-text);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  min-width: 120px;
+  text-align: left;
+}
+
+.control-description {
+  font-weight: 400;
+  color: var(--mono-text);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-align: right;
+  flex: 1;
+}
+
+/* Desktop styles for modal */
+@media (min-width: 769px) {
+  .modal-content {
+    width: 80%;
+    max-width: 600px;
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+  }
+
+  .control-action {
+    font-size: 1rem;
+    min-width: 140px;
+  }
+
+  .control-description {
+    font-size: 0.9rem;
+  }
+}
+
 /* Start Screen - Mobile optimized */
 .start-content {
   text-align: center;
@@ -1304,7 +1446,7 @@ html, body {
   letter-spacing: 0.05em;
 }
 
-.control-item {
+.controls-info .control-item {
   font-family: var(--font-family-game);
   font-size: 0.7rem;
   margin-bottom: 0.4rem;
@@ -1312,6 +1454,9 @@ html, body {
   color: var(--mono-text);
   font-weight: 400;
   letter-spacing: 0.02em;
+  display: block;
+  border: none;
+  padding: 0;
 }
 
 .special-feature {
@@ -1340,6 +1485,7 @@ html, body {
   justify-content: center;
   min-height: var(--touch-target);
   position: relative;
+  margin: 0.5rem 0;
 }
 
 .btn--primary {

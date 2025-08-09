@@ -86,6 +86,7 @@ let longPressTimer = null;
 let lastTapTime = 0;
 let touchCount = 0;
 let isLongPressTriggered = false;
+let isPauseResuming = false;
 
 // Device and performance tracking
 let devicePixelRatio = window.devicePixelRatio || 1;
@@ -100,6 +101,44 @@ function detectDevice() {
     if (width <= 768) return { type: 'mobile', size: 'large', touch: isTouchDevice };
     if (width <= 1024) return { type: 'tablet', size: 'standard', touch: isTouchDevice };
     return { type: 'desktop', size: 'standard', touch: isTouchDevice };
+}
+
+// Controls Modal Management
+function showControlsModal() {
+    console.log('Showing controls modal...');
+    
+    const modal = document.getElementById('controls-modal');
+    const mobileControls = document.getElementById('mobile-controls');
+    const desktopControls = document.getElementById('desktop-controls');
+    
+    if (!modal || !mobileControls || !desktopControls) {
+        console.error('Modal elements not found');
+        return;
+    }
+    
+    // Detect viewport width to show appropriate controls
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        mobileControls.style.display = 'block';
+        desktopControls.style.display = 'none';
+        console.log('Showing mobile controls');
+    } else {
+        mobileControls.style.display = 'none';
+        desktopControls.style.display = 'block';
+        console.log('Showing desktop controls');
+    }
+    
+    modal.classList.remove('hidden');
+}
+
+function hideControlsModal() {
+    console.log('Hiding controls modal...');
+    
+    const modal = document.getElementById('controls-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
 }
 
 // Fixed theme management
@@ -138,10 +177,7 @@ function initTheme() {
         }
     }
     
-    // Add multiple event types for better compatibility
     themeSwitch.addEventListener('change', handleThemeChange);
-    themeSwitch.addEventListener('click', handleThemeChange);
-    
     console.log('Theme system initialized successfully');
 }
 
@@ -175,12 +211,14 @@ function init() {
     if (mobileNextCanvas) mobileNextCtx = mobileNextCanvas.getContext('2d');
     if (holdCanvas) holdCtx = holdCanvas.getContext('2d');
 
-    // Initialize systems
+    // Initialize systems in order
     initTheme();
     setupCanvas();
     initializeBoard();
     setupEventListeners();
     setupEnhancedGestureControls();
+    
+    // Show start screen
     showScreen('start');
     
     // Handle orientation and resize
@@ -267,68 +305,93 @@ function initializeBoard() {
     console.log('Board initialized:', `${CONFIG.boardHeight}×${CONFIG.boardWidth}`);
 }
 
-// Fixed event listeners
+// Fixed event listeners setup
 function setupEventListeners() {
     console.log('Setting up event listeners...');
     
-    // Fixed PLAY button - wait for DOM and use multiple event types
-    setTimeout(() => {
-        const playBtn = document.getElementById('play-btn');
-        if (playBtn) {
-            console.log('PLAY button found, adding listeners');
-            
-            function handlePlayClick(event) {
-                console.log('PLAY button activated');
-                event.preventDefault();
-                event.stopPropagation();
-                startGame();
-            }
-            
-            // Add multiple event types for compatibility
-            playBtn.addEventListener('click', handlePlayClick, { passive: false });
-            playBtn.addEventListener('touchend', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                handlePlayClick(event);
-            }, { passive: false });
-            
-            console.log('PLAY button events added successfully');
-        } else {
-            console.error('PLAY button not found after timeout');
-        }
-    }, 100);
-    
-    // Other buttons with enhanced handling
-    setTimeout(() => {
-        const buttons = [
-            { id: 'pause-btn', handler: togglePause },
-            { id: 'restart-btn', handler: restartGame },
-            { id: 'home-btn', handler: goHome },
-            { id: 'resume-btn', handler: togglePause },
-            { id: 'pause-restart-btn', handler: restartGame },
-            { id: 'pause-home-btn', handler: goHome },
-            { id: 'gameover-restart-btn', handler: startGame },
-            { id: 'gameover-home-btn', handler: goHome }
-        ];
-        
-        buttons.forEach(({ id, handler }) => {
-            const btn = document.getElementById(id);
-            if (btn) {
-                function handleClick(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handler();
-                }
-                
-                btn.addEventListener('click', handleClick, { passive: false });
-                btn.addEventListener('touchend', handleClick, { passive: false });
-                console.log('Events added for:', id);
-            }
+    // Start Game Button
+    const playBtn = document.getElementById('play-btn');
+    if (playBtn) {
+        playBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('START GAME clicked!');
+            startGame();
         });
-    }, 100);
+        console.log('Play button listener added');
+    }
+    
+    // Controls Button and Modal
+    const controlsBtn = document.getElementById('controls-btn');
+    if (controlsBtn) {
+        controlsBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('CONTROLS button clicked!');
+            showControlsModal();
+        });
+        console.log('Controls button listener added');
+    }
+    
+    // Modal close handlers
+    const closeBtn = document.getElementById('controls-close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('Close button clicked!');
+            hideControlsModal();
+        });
+        console.log('Close button listener added');
+    }
+    
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('Backdrop clicked!');
+            hideControlsModal();
+        });
+        console.log('Backdrop listener added');
+    }
+    
+    // Game control buttons
+    const gameButtons = [
+        { id: 'pause-btn', handler: togglePause },
+        { id: 'restart-btn', handler: restartGame },
+        { id: 'home-btn', handler: goHome },
+        { id: 'resume-btn', handler: togglePause },
+        { id: 'pause-restart-btn', handler: restartGame },
+        { id: 'pause-home-btn', handler: goHome },
+        { id: 'gameover-restart-btn', handler: startGame },
+        { id: 'gameover-home-btn', handler: goHome }
+    ];
+    
+    gameButtons.forEach(({ id, handler }) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                handler();
+            });
+            console.log('Event listener added for:', id);
+        }
+    });
 
-    // Desktop keyboard controls
+    // Keyboard controls
     document.addEventListener('keydown', handleKeyPress);
+    
+    // Escape key to close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('controls-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                hideControlsModal();
+            }
+        }
+    });
     
     // Mobile prevention
     document.addEventListener('touchmove', (e) => {
@@ -363,34 +426,47 @@ function setupEnhancedGestureControls() {
     console.log('Gesture controls setup complete');
 }
 
-// Gesture handling
+// Fixed gesture handling with better pause/resume logic
 function handleGestureStart(event) {
     event.preventDefault();
     
-    if (gameState !== 'playing' || isFlipping) return;
+    if (isFlipping || isPauseResuming) return;
+    
+    // Clear any existing timer first
+    clearLongPressTimer();
     
     touchCount = event.touches.length;
     isLongPressTriggered = false;
     
-    if (event.touches.length === 1) {
+    if (event.touches.length === 1 && (gameState === 'playing' || gameState === 'pause')) {
         const touch = event.touches[0];
         touchStartX = touch.clientX;
         touchStartY = touch.clientY;
         touchStartTime = Date.now();
         
+        // Set long press timer for pause/resume
         longPressTimer = setTimeout(() => {
-            if (gameState === 'playing' && !isLongPressTriggered) {
+            if ((gameState === 'playing' || gameState === 'pause') && !isLongPressTriggered && !isPauseResuming) {
                 isLongPressTriggered = true;
+                isPauseResuming = true;
+                
                 if (navigator.vibrate) {
                     navigator.vibrate(50);
                 }
+                
+                console.log('Long press detected, toggling pause');
                 togglePause();
-                longPressTimer = null;
+                
+                // Reset flags after brief delay
+                setTimeout(() => {
+                    isPauseResuming = false;
+                    isLongPressTriggered = false;
+                }, 200);
             }
+            longPressTimer = null;
         }, GESTURE_CONFIG.longPressTimeout);
     } else if (event.touches.length === 2) {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
+        clearLongPressTimer();
     }
 }
 
@@ -402,9 +478,9 @@ function handleGestureMove(event) {
         const deltaX = Math.abs(touch.clientX - touchStartX);
         const deltaY = Math.abs(touch.clientY - touchStartY);
         
+        // Clear long press if finger moved significantly
         if (deltaX > 10 || deltaY > 10) {
-            clearTimeout(longPressTimer);
-            longPressTimer = null;
+            clearLongPressTimer();
         }
     }
 }
@@ -412,12 +488,12 @@ function handleGestureMove(event) {
 function handleGestureEnd(event) {
     event.preventDefault();
     
-    if (gameState !== 'playing' || isFlipping || isLongPressTriggered) return;
-    
-    if (longPressTimer) {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
+    if (gameState !== 'playing' || isFlipping || isLongPressTriggered || isPauseResuming) {
+        clearLongPressTimer();
+        return;
     }
+    
+    clearLongPressTimer();
     
     const currentTime = Date.now();
     const touch = event.changedTouches[0];
@@ -483,18 +559,22 @@ function handleGestureEnd(event) {
 
 function handleGestureCancel(event) {
     event.preventDefault();
-    
+    clearLongPressTimer();
+    touchCount = 0;
+    isLongPressTriggered = false;
+    isPauseResuming = false;
+}
+
+// Helper function to clear long press timer
+function clearLongPressTimer() {
     if (longPressTimer) {
         clearTimeout(longPressTimer);
         longPressTimer = null;
     }
-    
-    touchCount = 0;
-    isLongPressTriggered = false;
 }
 
 function handleKeyPress(event) {
-    if (gameState !== 'playing' || isFlipping) return;
+    if (gameState !== 'playing' || isFlipping || isPauseResuming) return;
 
     switch(event.code) {
         case 'ArrowLeft':
@@ -529,9 +609,16 @@ function handleKeyPress(event) {
             event.preventDefault();
             hardDrop();
             break;
+        case 'KeyP':
         case 'Escape':
             event.preventDefault();
-            togglePause();
+            if (!isPauseResuming) {
+                isPauseResuming = true;
+                togglePause();
+                setTimeout(() => {
+                    isPauseResuming = false;
+                }, 200);
+            }
             break;
     }
 }
@@ -539,6 +626,7 @@ function handleKeyPress(event) {
 function showScreen(screenName) {
     console.log('Showing screen:', screenName);
     
+    // Clear any animation frame immediately
     if (animationId) {
         cancelAnimationFrame(animationId);
         animationId = null;
@@ -569,14 +657,19 @@ function showScreen(screenName) {
             touchOverlay.classList.add('hidden');
         }
     }
-    
-    gameState = screenName;
 }
 
 function startGame() {
     console.log('Starting game...');
     
     try {
+        // Clear any existing animation loops
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        
+        // Initialize game state
         initializeBoard();
         score = 0;
         level = 1;
@@ -586,24 +679,28 @@ function startGame() {
         isFlipping = false;
         holdPiece = null;
         canHold = true;
+        isPauseResuming = false;
         
+        // Create first pieces
         nextPiece = createRandomPiece();
         spawnNewPiece();
         
+        // Setup display
+        gameState = 'playing';
         showScreen('game');
         setupCanvas();
         updateDisplay();
         drawNextPiece();
         drawHoldPiece();
         
-        gameState = 'playing';
-        
+        // Draw initial state
         draw();
         
+        // Start the game loop with proper timing
         lastTime = performance.now();
         animationId = requestAnimationFrame(gameLoop);
         
-        console.log('Game started successfully');
+        console.log('Game started successfully, animationId:', animationId);
         
     } catch (error) {
         console.error('Error starting game:', error);
@@ -612,25 +709,64 @@ function startGame() {
 
 function restartGame() {
     console.log('Restarting game...');
+    
+    // Clear timers and flags
+    clearLongPressTimer();
+    isPauseResuming = false;
+    
     startGame();
 }
 
 function goHome() {
     console.log('Going to home screen...');
+    
+    // Clear timers and flags
+    clearLongPressTimer();
+    isPauseResuming = false;
+    
     showScreen('start');
+    gameState = 'start';
 }
 
+// Fixed pause/resume functionality
 function togglePause() {
+    console.log('Toggle pause called, current state:', gameState);
+    
     if (gameState === 'playing') {
         console.log('Pausing game...');
+        
+        // Cancel the current animation frame
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        
+        // Set state and show pause screen
         gameState = 'pause';
         showScreen('pause');
+        
+        console.log('Game paused successfully');
+        
     } else if (gameState === 'pause') {
         console.log('Resuming game...');
+        
+        // Ensure no conflicting animation frames exist
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        
+        // Reset timing to prevent time jumps
+        lastTime = performance.now();
+        
+        // Set state and show game screen
         gameState = 'playing';
         showScreen('game');
-        lastTime = performance.now();
+        
+        // Restart the game loop
         animationId = requestAnimationFrame(gameLoop);
+        
+        console.log('Game resumed successfully, animationId:', animationId);
     }
 }
 
@@ -856,6 +992,15 @@ function triggerFlipAnimation() {
 
 function gameOver() {
     console.log('Game Over!');
+    
+    // Clear animation and timers
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    clearLongPressTimer();
+    isPauseResuming = false;
+    
     gameState = 'gameover';
     const finalScoreEl = document.getElementById('final-score');
     if (finalScoreEl) {
@@ -889,8 +1034,11 @@ function updateDisplay() {
     if (mobileLinesEl) mobileLinesEl.textContent = lines;
 }
 
+// Fixed game loop with better state management
 function gameLoop(currentTime) {
+    // Ensure we're in the right state and not flipping
     if (gameState !== 'playing' || isFlipping) {
+        // Only continue the loop if we're still supposed to be playing
         if (gameState === 'playing') {
             animationId = requestAnimationFrame(gameLoop);
         }
@@ -907,7 +1055,11 @@ function gameLoop(currentTime) {
     }
     
     draw();
-    animationId = requestAnimationFrame(gameLoop);
+    
+    // Continue the loop only if we're still in playing state
+    if (gameState === 'playing') {
+        animationId = requestAnimationFrame(gameLoop);
+    }
 }
 
 function draw() {
@@ -1043,24 +1195,37 @@ function debounce(func, wait) {
     };
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing mobile Tetris...');
+// Improved initialization sequence
+function initializeApp() {
+    console.log('Initializing Tetris application...');
     
-    // Add slight delay to ensure all elements are ready
+    // Make sure DOM is fully loaded
+    if (document.readyState === 'loading') {
+        console.log('DOM still loading, waiting...');
+        return;
+    }
+    
+    // Initialize immediately if DOM is ready
     setTimeout(() => {
-        try {
-            init();
-        } catch (error) {
-            console.error('Initialization failed:', error);
-        }
-    }, 100);
-});
+        init();
+    }, 50);
+}
 
-// Handle visibility changes
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
+
+// Handle visibility changes with better pause logic
 document.addEventListener('visibilitychange', function() {
-    if (document.hidden && gameState === 'playing') {
+    if (document.hidden && gameState === 'playing' && !isPauseResuming) {
+        isPauseResuming = true;
         togglePause();
+        setTimeout(() => {
+            isPauseResuming = false;
+        }, 200);
     }
 });
 

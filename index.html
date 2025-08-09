@@ -20,10 +20,9 @@
     <!-- Start Screen -->
     <div id="start-screen" class="screen">
         <div class="start-content">
-            <h1 class="game-title">TACTRIX</h1>
+            <h1 class="game-title">TETRIS</h1>
             <p class="game-subtitle">20×20 Monochrome Edition</p>
-            <h2 class="game-subtitle">By : Monochrome Master</h2>
-
+            
             <!-- Theme Toggle -->
             <div class="theme-toggle-container">
                 <label class="theme-toggle" for="theme-switch">
@@ -35,7 +34,81 @@
             </div>
             
             <button id="play-btn" class="btn btn--primary btn--lg">START GAME</button>
+            <button id="controls-btn" class="btn btn--secondary btn--lg">CONTROLS</button>
             <p class="gesture-hint">GESTURE CONTROLS • NO BUTTONS</p>
+        </div>
+    </div>
+
+    <!-- Controls Modal -->
+    <div id="controls-modal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">CONTROLS</h2>
+                <button id="controls-close-btn" class="modal-close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="mobile-controls" class="controls-section">
+                    <div class="control-item">
+                        <span class="control-action">SWIPE ←→</span>
+                        <span class="control-description">MOVE LEFT/RIGHT</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">TAP</span>
+                        <span class="control-description">ROTATE CLOCKWISE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">SWIPE ↓</span>
+                        <span class="control-description">SOFT DROP</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">FAST SWIPE ↓</span>
+                        <span class="control-description">HARD DROP</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">SWIPE ↑</span>
+                        <span class="control-description">HOLD PIECE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">2-FINGER TAP</span>
+                        <span class="control-description">ROTATE COUNTER-CLOCKWISE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">LONG PRESS</span>
+                        <span class="control-description">PAUSE/RESUME</span>
+                    </div>
+                </div>
+                <div id="desktop-controls" class="controls-section">
+                    <div class="control-item">
+                        <span class="control-action">← →</span>
+                        <span class="control-description">MOVE LEFT/RIGHT</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">↑</span>
+                        <span class="control-description">ROTATE CLOCKWISE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">↓</span>
+                        <span class="control-description">SOFT DROP</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">SPACE</span>
+                        <span class="control-description">HARD DROP</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">C / H</span>
+                        <span class="control-description">HOLD PIECE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Z</span>
+                        <span class="control-description">ROTATE COUNTER-CLOCKWISE</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">P / ESC</span>
+                        <span class="control-description">PAUSE/RESUME</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
