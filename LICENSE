@@ -1,0 +1,46 @@
+MIT License
+
+Copyright (c) 2025 Monochrome Tetris 20×20
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Additional Notes:
+
+This project is a unique implementation of falling-block puzzle mechanics
+featuring:
+- Original 20×20 grid design (expanded from traditional 10×20)
+- Custom mobile-optimized invisible gesture controls
+- Strict monochrome visual design philosophy
+- Battery-efficient rendering optimizations
+- Cross-platform responsive design
+
+The core falling-block puzzle gameplay mechanics are not subject to copyright
+and are widely implemented across the gaming community. This implementation
+contains no copyrighted code from other sources.
+
+Third-party resources used:
+- Google Fonts: Electrolize (licensed under SIL Open Font License)
+- HTML5 Canvas API (web standard)
+- CSS3 specifications (web standard)
+- JavaScript ES6+ features (web standard)
+
+For questions about licensing or usage, please refer to the MIT License terms
+above or contact the project maintainers through GitHub issues.

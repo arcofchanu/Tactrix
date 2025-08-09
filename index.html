@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Monochrome Tetris - 20x20</title>
+    
+    <!-- Preload Electrolize font for optimal performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize:wght@400&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Electrolize:wght@400&display=swap" rel="stylesheet"></noscript>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+        <div class="start-content">
+            <h1 class="game-title">TACTRIX</h1>
+            <p class="game-subtitle">20×20 Monochrome Edition</p>
+            <h2 class="game-subtitle">By : Monochrome Master</h2>
+
+            <!-- Theme Toggle -->
+            <div class="theme-toggle-container">
+                <label class="theme-toggle" for="theme-switch">
+                    <span class="theme-toggle-label">DARK</span>
+                    <input type="checkbox" id="theme-switch" class="theme-toggle-input">
+                    <span class="theme-toggle-slider"></span>
+                    <span class="theme-toggle-label">LIGHT</span>
+                </label>
+            </div>
+            
+            <button id="play-btn" class="btn btn--primary btn--lg">START GAME</button>
+            <p class="gesture-hint">GESTURE CONTROLS • NO BUTTONS</p>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen hidden">
+        <div class="game-layout">
+            <!-- Mobile Score Bar (always visible on mobile/tablet) -->
+            <div class="mobile-score-bar">
+                <div class="mobile-score-item">
+                    <span class="mobile-score-label">SCORE</span>
+                    <span id="mobile-score" class="mobile-score-value">0</span>
+                </div>
+                <div class="mobile-score-item">
+                    <span class="mobile-score-label">LV</span>
+                    <span id="mobile-level" class="mobile-score-value">1</span>
+                </div>
+                <div class="mobile-score-item">
+                    <span class="mobile-score-label">LINES</span>
+                    <span id="mobile-lines" class="mobile-score-value">0</span>
+                </div>
+                <div class="mobile-score-item mobile-next-container">
+                    <span class="mobile-score-label">NEXT</span>
+                    <canvas id="mobile-next-canvas" width="44" height="44"></canvas>
+                </div>
+            </div>
+
+            <!-- Desktop Side Panels -->
+            <div class="side-panel left-panel">
+                <div class="score-panel">
+                    <div class="score-item">
+                        <span class="score-label">SCORE</span>
+                        <span id="score" class="score-value">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label">LEVEL</span>
+                        <span id="level" class="score-value">1</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label">LINES</span>
+                        <span id="lines" class="score-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="game-area">
+                <canvas id="game-canvas" width="500" height="500"></canvas>
+                
+                <!-- Desktop Controls -->
+                <div class="desktop-controls">
+                    <button id="pause-btn" class="btn btn--secondary">PAUSE</button>
+                    <button id="restart-btn" class="btn btn--outline">RESTART</button>
+                    <button id="home-btn" class="btn btn--outline">HOME</button>
+                </div>
+            </div>
+
+            <!-- Desktop Right Panel -->
+            <div class="side-panel right-panel">
+                <div class="next-panel">
+                    <h3 class="next-title">NEXT PIECE</h3>
+                    <canvas id="next-canvas" width="120" height="120"></canvas>
+                </div>
+                <div class="controls-info">
+                    <h3 class="controls-title">TOUCH GESTURES</h3>
+                    <div class="control-item">SWIPE ←→ MOVE</div>
+                    <div class="control-item">TAP • ROTATE ↻</div>
+                    <div class="control-item">SWIPE ↓ DROP</div>
+                    <div class="control-item">LONG PRESS • PAUSE</div>
+                    <div class="control-item">SWIPE ↑ HOLD</div>
+                    <div class="control-item">2-FINGER TAP ↺</div>
+                    <div class="control-item special-feature">20×20 GRID</div>
+                </div>
+            </div>
+
+            <!-- Hold Piece Display (Mobile floating) -->
+            <div class="mobile-hold-display">
+                <span class="hold-label">HOLD</span>
+                <canvas id="hold-canvas" width="60" height="60"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Screen -->
+    <div id="pause-screen" class="screen overlay hidden">
+        <div class="pause-content">
+            <h2 class="pause-title">GAME PAUSED</h2>
+            <div class="pause-buttons">
+                <button id="resume-btn" class="btn btn--primary btn--lg">RESUME</button>
+                <button id="pause-restart-btn" class="btn btn--outline">RESTART</button>
+                <button id="pause-home-btn" class="btn btn--outline">MAIN MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen overlay hidden">
+        <div class="gameover-content">
+            <h2 class="gameover-title">GAME OVER</h2>
+            <div class="final-score">
+                <span class="final-score-label">FINAL SCORE</span>
+                <span id="final-score" class="final-score-value">0</span>
+            </div>
+            <div class="gameover-buttons">
+                <button id="gameover-restart-btn" class="btn btn--primary btn--lg">PLAY AGAIN</button>
+                <button id="gameover-home-btn" class="btn btn--outline">MAIN MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invisible Touch Overlay for Gesture Detection -->
+    <div id="touch-overlay" class="touch-overlay hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
