@@ -27,10 +27,10 @@
             <!-- Theme Toggle -->
             <div class="theme-toggle-container">
                 <label class="theme-toggle" for="theme-switch">
-                    <span class="theme-toggle-label">DARK</span>
+                    <span class="theme-toggle-label">LIGHT</span>
                     <input type="checkbox" id="theme-switch" class="theme-toggle-input">
                     <span class="theme-toggle-slider"></span>
-                    <span class="theme-toggle-label">LIGHT</span>
+                    <span class="theme-toggle-label">DARK</span>
                 </label>
             </div>
             
@@ -68,7 +68,7 @@
                     </div>
                     <div class="control-item">
                         <span class="control-action">SWIPE ↑</span>
-                        <span class="control-description">HOLD PIECE</span>
+                        <span class="control-description">PRESERVE / CHANGE TO THE PRESERVE PIECE</span>
                     </div>
                     <div class="control-item">
                         <span class="control-action">2-FINGER TAP</span>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="control-item">
                         <span class="control-action">C / H</span>
-                        <span class="control-description">HOLD PIECE</span>
+                        <span class="control-description">PRESERVE / CHANGE TO THE PRESERVE PIECE</span>
                     </div>
                     <div class="control-item">
                         <span class="control-action">Z</span>
@@ -173,20 +173,21 @@
                     <canvas id="next-canvas" width="120" height="120"></canvas>
                 </div>
                 <div class="controls-info">
-                    <h3 class="controls-title">TOUCH GESTURES</h3>
-                    <div class="control-item">SWIPE ←→ MOVE</div>
-                    <div class="control-item">TAP • ROTATE ↻</div>
-                    <div class="control-item">SWIPE ↓ DROP</div>
-                    <div class="control-item">LONG PRESS • PAUSE</div>
-                    <div class="control-item">SWIPE ↑ HOLD</div>
-                    <div class="control-item">2-FINGER TAP ↺</div>
+                    <h3 class="controls-title">CONTROLS</h3>
+                    <div class="control-item">← → MOVE LEFT/RIGHT</div>
+                    <div class="control-item">↑ ROTATE</div>
+                    <div class="control-item">↓ SOFT DROP</div>
+                    <div class="control-item">SPACE HARD DROP</div>
+                    <div class="control-item">P / ESC PAUSE/RESUME</div>
+                    <div class="control-item">C / H PRESERVE</div>
+                    <div class="control-item">z COUNTER CLOCKWISE ↺</div>
                     <div class="control-item special-feature">20×20 GRID</div>
                 </div>
             </div>
 
             <!-- Hold Piece Display (Mobile floating) -->
             <div class="mobile-hold-display">
-                <span class="hold-label">HOLD</span>
+                <span class="hold-label">VAULT</span>
                 <canvas id="hold-canvas" width="60" height="60"></canvas>
             </div>
         </div>
